@@ -1,7 +1,5 @@
 <?php 
     require 'data_loader.php';
-    $customer_data = customer_record();
-    var_dump($customer_data);
 ?>
 
 <!DOCTYPE html>
@@ -10,9 +8,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="app.css"></link>
     <title>Customer Profile</title>
 </head>
 <body>
-    <h1></h1>
+    <h1>Customer Portal</h1>
+    <!-- <form action="POST">
+        
+    </form> -->
+    <?php
+        echo customer_profile_page();
+    ?>
 </body>
 </html>

@@ -1,0 +1,29 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: arial;
+    margin-left: 10px;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 50px 0;
+    font-family: arial;
+}
+
+thead {
+    font-size: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+tr:nth-child(even) td {
+    background: rgba(129, 133, 139, 0.993);
+}
+
+tr:nth-child(odd) td {
+    background: rgb(125, 174, 194);
+}
