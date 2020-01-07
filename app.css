@@ -1,29 +1,51 @@
 body {
     margin: 0;
     padding: 0;
+    margin: 0px 20px;
+    background-color: rgb(204, 206, 235);
+}
+
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h3 {
     font-family: arial;
-    margin-left: 10px;
+    margin: 0;
+    background-color: rgba(73, 109, 226, 0.87);
+    padding: 10px;
+    color: white;
+}
+
+.section {
+    background-color: white;
+    max-width: 800px;
+    margin: 20px 0;
 }
 
 table {
     border-collapse: collapse;
-    border-spacing: 50px 0;
     font-family: arial;
+    width: 100%;
 }
 
-thead {
-    font-size: 20px;
+tr {
+    border-bottom: 1px black solid;
+    padding-left: 10px
 }
 
 th, td {
     padding: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 tr:nth-child(even) td {
-    background: rgba(129, 133, 139, 0.993);
+    background: white
 }
 
 tr:nth-child(odd) td {
-    background: rgb(125, 174, 194);
+    background: rgb(192, 209, 216);
 }

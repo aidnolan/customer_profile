@@ -40,7 +40,6 @@ function customer_profile_page()
     $trip_list = trip_list($cust_record['cust_id']);
 
     $html .= $passenger_list . $trip_list;
-    // var_dump($html);
     return $html;
 }
 function passenger_list($cust_id)
@@ -54,8 +53,8 @@ function passenger_list($cust_id)
     $query = $pdo->query($sql);
     $passrec = $query->fetchAll();
 
-    $html .= "<div>";
-        $html .= "<h2>Passengers</h2>";
+    $html .= "<div class='section'>";
+        $html .= "<h3>Passengers</h3>";
         $html .= "<table>";
             $html .= "<thead>";
                 $html .= "<tr>";
@@ -84,6 +83,9 @@ function passenger_list($cust_id)
     $html .= "</div>";
         
     return $html;
+    // $sql = "
+    //     INSERT INTO enquiries (enq_name, enq_email, enq_tel)
+    //     VALUES ('".$output["enq_name"]."','".$output["enq_email"]."','".$output["enq_tel"]."')";
 }
 
 function trip_list($cust_id)
@@ -97,8 +99,8 @@ function trip_list($cust_id)
     $query = $pdo->query($sql);
     $triprec = $query->fetchAll();
 
-    $html .= "<div>";
-        $html .= "<h2>Trips</h2>";
+    $html .= "<div class='section'>";
+        $html .= "<h3>Trips</h3>";
         $html .= "<table>";
             $html .= "<thead>";
                 $html .= "<tr>";

@@ -13,9 +13,6 @@
 </head>
 <body>
     <h1>Customer Portal</h1>
-    <!-- <form action="POST">
-        
-    </form> -->
     <?php
         echo customer_profile_page();
     ?>
