@@ -25,14 +25,17 @@ function input_cleaner($input)
 function customer_profile_page()
 {
     require("config.php");
+    
     $html = "";
     $output = input_cleaner($_GET);
+ 
+    $sql ='SELECT * FROM customers ';
+    if ($output) {
+        $sql .= 'WHERE cust_email = "' . $output['cust_email'] . '"';
+    } else {
+        $sql .= 'WHERE cust_id = ' . $_POST['cust_id'];
+    };
 
-    $sql ='
-        SELECT * FROM customers
-        WHERE cust_email = "' . $output['cust_email'] . '";
-    ';
-    
     $query = $pdo->query($sql);
     $cust_record = $query->fetch();
 
@@ -42,14 +45,17 @@ function customer_profile_page()
     $html .= $passenger_list . $trip_list;
     return $html;
 }
+
 function passenger_list($cust_id)
 {
     require("config.php");
+    
     $html = "";
     $sql ='
         SELECT * FROM passengers
         WHERE passenger_cust_id = "' . $cust_id . '";
     ';
+
     $query = $pdo->query($sql);
     $passrec = $query->fetchAll();
 
@@ -74,28 +80,34 @@ function passenger_list($cust_id)
                         $html .= "<td>" . $passenger['passenger_fname'] . "</td>";
                         $html .= "<td>" . $passenger['passenger_sname'] . "</td>";
                         $html .= "<td>" . $passenger['passenger_passport_id'] . "</td>";
-                        $html .= "<td></td>";
+                        $html .= "<td>";
+                            $html .= "<form action='' method='POST'>";
+                                $html .= "<input type='submit' value='Delete' />";
+                            $html .= '</form>';
+                        $html .= "</td>";
                         $html .= "<td></td>";
                     $html .= "</tr>";
                 }
             $html .= "</tbody>";
         $html .= "</table>";
+        $html .= "<form class='add-button' action='new_passenger.php' method='POST'>";
+            $html .= "<input type='submit' value='Add Passenger' />";
+        $html .= '</form>';
     $html .= "</div>";
         
     return $html;
-    // $sql = "
-    //     INSERT INTO enquiries (enq_name, enq_email, enq_tel)
-    //     VALUES ('".$output["enq_name"]."','".$output["enq_email"]."','".$output["enq_tel"]."')";
 }
 
 function trip_list($cust_id)
 {
     require("config.php");
 
+    $html = "";
     $sql ='
         SELECT * FROM trips
         WHERE trip_cust_id = "' . $cust_id . '";
     ';
+
     $query = $pdo->query($sql);
     $triprec = $query->fetchAll();
 
@@ -134,8 +146,43 @@ function trip_list($cust_id)
                 }
             $html .= "</tbody>";
         $html .= "</table>";
+        $html .= "<form class='add-button' action='new_trip.php' method='POST'>";
+            $html .= "<input type='submit' value='Add Trip' />";
+        $html .= '</form>';
     $html .= "</div>";
 
     return $html;
 
+}
+
+function cust_record()
+{
+    require("config.php");
+
+    $output = input_cleaner($_GET);
+
+    $sql ='SELECT * FROM customers ';
+    if ($output) {
+        $sql .= 'WHERE cust_email = "' . $output['cust_email'] . '"';
+    } else {
+        $sql .= 'WHERE cust_id = ' . $_POST['cust_id'];
+    };
+    
+    $query = $pdo->query($sql);
+    $cust_record = $query->fetch();
+
+    return $cust_record;
+}
+
+function delete_passenger($passenger_id)
+{
+    require("config.php");
+    $sql = 'DELETE FROM passengers WHERE passenger_id=?';
+    $query = $pdo->prepare($sql);
+    $query->execute([$passenger_id]);
+}
+
+function passenger_record()
+{
+    //
 }

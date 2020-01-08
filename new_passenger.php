@@ -1,6 +1,5 @@
 <?php 
     require 'data_loader.php';
-    $custrec = cust_record();
 ?>
 
 <!DOCTYPE html>
@@ -13,48 +12,48 @@
     <title>Customer Profile</title>
 </head>
 <body>
-    <h1>Customer Portal</h1>
-
     <div class="section">
-        <h3>Basic Info</h3>
+        <h3>Add Passenger</h3>
         <form action="update_profile.php" method="POST">
-            <input name="cust_id" type="hidden" value="<?= $custrec['cust_id'] ?>">
+            <input name="cust_id" type="hidden" placeholder="">
             <div style="margin-top: 10px">
-                <label for="cust_email">Email</label>
+                <label for="passenger_title">Title</label>
             </div>
             <div>
-                <input name="cust_email" type="email" value="<?= $custrec['cust_email'] ?>">
+                <select name="passenger_title">
+                    <option value="mr">Mr</option>
+                    <option value="miss">Miss</option>
+                    <option value="mrs">Mrs</option>
+                    <option value="rev">Rev</option>
+                    <option value="prof">Prof</option>
+                </select>
             </div>
             <div style="margin-top: 10px">
-                <label for="cust_name">Name</label>
+                <label for="pas">First Name</label>
             </div>
             <div>
-                <input name="cust_name" type="text" value="<?= $custrec['cust_name'] ?>">
+                <input name="cust_name" type="text">
             </div>
             <div style="margin-top: 10px">
-                <label for="cust_address">Address</label>
+                <label for="cust_address">Surname</label>
             </div>
             <div>
-                <input name="cust_address" type="text" value="<?= $custrec['cust_address'] ?>">
+                <input name="cust_address" type="text">
             </div>
             <div style="margin-top: 10px">
-                <label for="cust_city">City</label>
+                <label for="passenger_passport_id">Passport ID</label>
             </div>
             <div>
-                <input name="cust_city" type="text" value="<?= $custrec['cust_city'] ?>">
+                <input name="passenger_passport_id" type="text">
             </div>
             <div style="margin-top: 10px">
                 <label for="cust_country">Country</label>
             </div>
             <div>
-                <input name="cust_country" type="text" value="<?= $custrec['cust_country'] ?>">
+                <input name="cust_country" type="text">
             </div>
             <input style="margin-top: 10px" type="submit">
         </form>
     </div>
-
-    <?php
-        echo customer_profile_page();
-    ?>
 </body>
 </html>
