@@ -10,9 +10,7 @@ function input_cleaner($input)
             stripslashes(
                 trim(
                     strip_tags(
-                        strtolower(
-                            $data
-                        )
+                        $data
                     )
                 )
             )
@@ -28,22 +26,48 @@ function customer_profile_page()
     
     $html = "";
     $output = input_cleaner($_GET);
- 
+    
     $sql ='SELECT * FROM customers ';
-    if ($output) {
+    
+    if ($output['cust_email']) {
         $sql .= 'WHERE cust_email = "' . $output['cust_email'] . '"';
-    } else {
+        $query = $pdo->query($sql);
+        $cust_record = $query->fetch();
+
+        do_login($output['cust_password'], $cust_record['cust_password']);
+
+    } else if ($_POST['cust_id']) {
         $sql .= 'WHERE cust_id = ' . $_POST['cust_id'];
+        $query = $pdo->query($sql);
+        $cust_record = $query->fetch();
+
+    } else {
+        echo '<h3>Incorrect Password or email</h3>';
+        echo '<form action="index.php" method="POST">';
+            echo '<input type="submit" value="Return to login" />';
+        echo '</form>';
+        return "";
     };
-
-    $query = $pdo->query($sql);
-    $cust_record = $query->fetch();
-
+    
     $passenger_list = passenger_list($cust_record['cust_id']);
     $trip_list = trip_list($cust_record['cust_id']);
 
     $html .= $passenger_list . $trip_list;
     return $html;
+}
+
+function do_login($cust_login, $password_entered)
+{
+    if(password_verify($cust_login, $password_entered)) {
+        //
+    } else {
+        $cust_record = "";
+        echo '<h3>Incorrect Password or email</h3>';
+        echo '<form action="index.php" method="POST">';
+            echo '<input type="submit" value="Return to login" />';
+        echo '</form>';
+        exit;
+    }
 }
 
 function passenger_list($cust_id)
@@ -91,6 +115,7 @@ function passenger_list($cust_id)
             $html .= "</tbody>";
         $html .= "</table>";
         $html .= "<form class='add-button' action='new_passenger.php' method='POST'>";
+            $html .= "<input name='cust_id' type='hidden' value='" . $cust_id . "' />";
             $html .= "<input type='submit' value='Add Passenger' />";
         $html .= '</form>';
     $html .= "</div>";
@@ -147,6 +172,7 @@ function trip_list($cust_id)
             $html .= "</tbody>";
         $html .= "</table>";
         $html .= "<form class='add-button' action='new_trip.php' method='POST'>";
+            $html .= "<input name='cust_id' type='hidden' value='" . $cust_id . "' />";
             $html .= "<input type='submit' value='Add Trip' />";
         $html .= '</form>';
     $html .= "</div>";
@@ -164,14 +190,25 @@ function cust_record()
     $sql ='SELECT * FROM customers ';
     if ($output) {
         $sql .= 'WHERE cust_email = "' . $output['cust_email'] . '"';
-    } else {
+    } else if ($_POST['cust_id']) {
         $sql .= 'WHERE cust_id = ' . $_POST['cust_id'];
-    };
+    }
     
     $query = $pdo->query($sql);
     $cust_record = $query->fetch();
 
     return $cust_record;
+}
+
+function passenger_record($cust_id) {
+    require("config.php");
+
+    $sql ='SELECT * FROM passengers WHERE passenger_cust_id = "' . $cust_id . '"';
+    
+    $query = $pdo->query($sql);
+    $passenger_record = $query->fetchAll();
+    
+    return $passenger_record;
 }
 
 function delete_passenger($passenger_id)
@@ -180,9 +217,4 @@ function delete_passenger($passenger_id)
     $sql = 'DELETE FROM passengers WHERE passenger_id=?';
     $query = $pdo->prepare($sql);
     $query->execute([$passenger_id]);
-}
-
-function passenger_record()
-{
-    //
 }

@@ -1,6 +1,7 @@
 <?php 
     require 'data_loader.php';
     $custrec = cust_record();
+    $profile_html = customer_profile_page();
 ?>
 
 <!DOCTYPE html>
@@ -13,6 +14,7 @@
     <title>Customer Profile</title>
 </head>
 <body>
+<?php if($profile_html): ?>
     <h1>Customer Portal</h1>
 
     <div class="section">
@@ -52,9 +54,10 @@
             <input style="margin-top: 10px" type="submit">
         </form>
     </div>
-
+    <?php endif ?>
+    
     <?php
-        echo customer_profile_page();
+        echo $profile_html;
     ?>
 </body>
 </html>
