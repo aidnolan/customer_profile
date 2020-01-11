@@ -1,7 +1,3 @@
-<?php 
-    require 'data_loader.php';
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +10,8 @@
 <body>
     <div class="section">
         <h3>Add Passenger</h3>
-        <form action="update_profile.php" method="POST">
-            <input name="cust_id" type="hidden" placeholder="">
+        <form action="create_passenger.php" method="POST">
+            <input name="cust_id" type="hidden" value="<?= $_POST['cust_id'] ?>">
             <div style="margin-top: 10px">
                 <label for="passenger_title">Title</label>
             </div>
@@ -29,28 +25,22 @@
                 </select>
             </div>
             <div style="margin-top: 10px">
-                <label for="pas">First Name</label>
+                <label for="passenger_fname">First Name</label>
             </div>
             <div>
-                <input name="cust_name" type="text">
+                <input name="passenger_fname" type="text">
             </div>
             <div style="margin-top: 10px">
-                <label for="cust_address">Surname</label>
+                <label for="passenger_sname">Surname</label>
             </div>
             <div>
-                <input name="cust_address" type="text">
+                <input name="passenger_sname" type="text">
             </div>
             <div style="margin-top: 10px">
                 <label for="passenger_passport_id">Passport ID</label>
             </div>
             <div>
                 <input name="passenger_passport_id" type="text">
-            </div>
-            <div style="margin-top: 10px">
-                <label for="cust_country">Country</label>
-            </div>
-            <div>
-                <input name="cust_country" type="text">
             </div>
             <input style="margin-top: 10px" type="submit">
         </form>

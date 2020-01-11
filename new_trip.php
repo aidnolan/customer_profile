@@ -1,5 +1,6 @@
 <?php 
     require 'data_loader.php';
+    $passenger_record = passenger_record($_POST['cust_id']);
 ?>
 
 <!DOCTYPE html>
@@ -15,8 +16,8 @@
     <div class="section">
         <h3>Add Trip</h3>
         
-        <form action="update_profile.php" method="POST">
-            <input name="cust_id" type="hidden" placeholder="">
+        <form action="create_trip.php" method="POST">
+            <input name="cust_id" type="hidden" value="<?= $_POST['cust_id'] ?>">
             <div style="margin-top: 10px">
                 <label for="trip_dep_airport">Departure Airport</label>
             </div>
@@ -33,14 +34,21 @@
                 <label for="trip_dep_time">Departure Date</label>
             </div>
             <div>
-                <input name="trip_dep_time" type="text">
+                <input name="trip_dep_time" type="date">
             </div>
             <div style="margin-top: 10px">
                 <label for="trip_arr_time">Arrival Date</label>
             </div>
             <div>
-                <input name="trip_arr_time" type="text">
+                <input name="trip_arr_time" type="date">
             </div>
+            <div class="checkbox">
+                <?php foreach ($passenger_record as $passenger): ?>
+                    <label><?= $passenger['passenger_title']?></label>
+                    <input type="checkbox" value="">
+                <?php endforeach ?>
+            </div>
+
             <input style="margin-top: 10px" type="submit">
         </form>
     </div>
