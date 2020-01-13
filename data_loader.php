@@ -5,6 +5,10 @@ function input_cleaner($input)
 {
     $clean_search_input = [];
     foreach ($input as $heading => $data) {
+        if(gettype($data) == 'array') {
+            $clean_search_input[$heading] = $data;
+            continue;
+        }
         $cleaned_data =
         htmlspecialchars(
             stripslashes(
@@ -29,7 +33,7 @@ function customer_profile_page()
     
     $sql ='SELECT * FROM customers ';
     
-    if ($output['cust_email']) {
+    if (isset($output['cust_email'])) {
         $sql .= 'WHERE cust_email = "' . $output['cust_email'] . '"';
         $query = $pdo->query($sql);
         $cust_record = $query->fetch();
@@ -105,7 +109,9 @@ function passenger_list($cust_id)
                         $html .= "<td>" . $passenger['passenger_sname'] . "</td>";
                         $html .= "<td>" . $passenger['passenger_passport_id'] . "</td>";
                         $html .= "<td>";
-                            $html .= "<form action='' method='POST'>";
+                            $html .= "<form action='delete_record.php' method='POST'>";
+                                $html .= "<input name='passenger_id' type='hidden' value='" . $passenger['passenger_id'] . "' />";
+                                $html .= "<input name='cust_id' type='hidden' value='" . $cust_id . "' />";
                                 $html .= "<input type='submit' value='Delete' />";
                             $html .= '</form>';
                         $html .= "</td>";
@@ -136,6 +142,32 @@ function trip_list($cust_id)
     $query = $pdo->query($sql);
     $triprec = $query->fetchAll();
 
+    foreach($triprec as &$trip) {
+        if(isset($trip['trip_passengers'])) {
+            $passengers = explode(',', $trip['trip_passengers']);
+            $sql_pass = 'SELECT passenger_title, passenger_fname, passenger_sname FROM passengers ';
+    
+            if(count($passengers) == 1) {
+                $sql_pass .= 'WHERE passenger_id = "' . $passengers[0] . '"';
+            } else {
+                foreach($passengers as $index => $passenger_id) {
+                    if($index == 0) {
+                        $sql_pass .= 'WHERE passenger_id ="' . $passenger_id. '" ';
+                    } else {
+                        $sql_pass .= 'OR passenger_id ="' . $passenger_id. '" ';
+                    }
+                }
+            }
+            $query = $pdo->query($sql_pass);
+            $trip_pass_rec = $query->fetchAll();
+            foreach($trip_pass_rec as $passenger) {
+                $trip['passengers'][] = implode(" ", $passenger);
+            }
+        } else {
+            $trip['passengers'][] = "";
+        }
+    }
+
     $html .= "<div class='section'>";
         $html .= "<h3>Trips</h3>";
         $html .= "<table>";
@@ -157,15 +189,22 @@ function trip_list($cust_id)
                     $dep_time = new DateTime($trip['trip_arr_time']);
                     $dep_time = $dep_time->format('d-m-Y H:m');
                     $arr_time = new DateTime($trip['trip_arr_time']);
-                    $arr_time = $arr_time->format('d-m-Y H:m');
+                    $arr_time = $arr_time->format('d/m/Y H:m:s');
 
                     $html .= "<tr>";
                         $html .= "<td>" . $trip['trip_dep_airport'] . "</td>";
                         $html .= "<td>" . $trip['trip_arr_airport'] . "</td>";
                         $html .= "<td>" . $dep_time . "</td>";
                         $html .= "<td>" . $arr_time . "</td>";
-                        $html .= "<td>passenger list tbd</td>";
-                        $html .= "<td></td>";
+                        $html .= "<td>" . implode(", ", $trip['passengers'])  . "</td>";
+                        $html .= "<td>";
+                            $html .= "<form action='delete_record.php' method='POST'>";
+                                $html .= "<input name='trip_id' type='hidden' value='" . $trip['trip_id'] . "' />";
+                                $html .= "<input name='cust_id' type='hidden' value='" . $cust_id . "' />";
+                                $html .= "<input type='submit' value='Delete' />";
+                            $html .= '</form>';
+                        $html .= "</td>";
+                        
                         $html .= "<td></td>";
                     $html .= "</tr>";
                 }
@@ -178,7 +217,6 @@ function trip_list($cust_id)
     $html .= "</div>";
 
     return $html;
-
 }
 
 function cust_record()
@@ -209,12 +247,4 @@ function passenger_record($cust_id) {
     $passenger_record = $query->fetchAll();
     
     return $passenger_record;
-}
-
-function delete_passenger($passenger_id)
-{
-    require("config.php");
-    $sql = 'DELETE FROM passengers WHERE passenger_id=?';
-    $query = $pdo->prepare($sql);
-    $query->execute([$passenger_id]);
 }

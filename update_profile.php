@@ -1,4 +1,5 @@
 <?php
+require 'config.php';
 require 'data_loader.php';
 
 $input = input_cleaner($_POST);
@@ -18,5 +19,6 @@ $query->execute([
 
 echo "Profile updated!";
 echo '<form action="customer_page.php" method="POST">';
+    echo '<input name="cust_id" type="hidden" value="' . $input['cust_id'] . '" />';
     echo '<input type="submit" value="Return to profile" />';
 echo '</form>';

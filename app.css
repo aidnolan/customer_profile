@@ -46,7 +46,6 @@ tr:nth-child(odd) td {
 }
 
 form {
-    background-color: white;
     max-width: 800px;
     margin: 20px 10px;
 }

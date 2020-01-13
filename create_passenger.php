@@ -1,7 +1,7 @@
 <?php
 require 'config.php';
 require 'data_loader.php';
-var_dump($_POST);
+
 $input = input_cleaner($_POST);
 
 $sql = "INSERT INTO passengers (passenger_title, passenger_fname, passenger_sname, passenger_passport_id, passenger_cust_id)

@@ -34,18 +34,22 @@
                 <label for="trip_dep_time">Departure Date</label>
             </div>
             <div>
-                <input name="trip_dep_time" type="date">
+                <input name="trip_dep_time" type="datetime-local">
             </div>
             <div style="margin-top: 10px">
                 <label for="trip_arr_time">Arrival Date</label>
             </div>
             <div>
-                <input name="trip_arr_time" type="date">
+                <input name="trip_arr_time" type="datetime-local">
             </div>
             <div class="checkbox">
                 <?php foreach ($passenger_record as $passenger): ?>
-                    <label><?= $passenger['passenger_title']?></label>
-                    <input type="checkbox" value="">
+                    <label for="passenger"><?=
+                        $passenger['passenger_title'] . " " .
+                        $passenger['passenger_fname'] . " " .
+                        $passenger['passenger_sname']
+                    ?></label>
+                    <input name="passengers[]" type="checkbox" value="<?= $passenger['passenger_id'] ?>">
                 <?php endforeach ?>
             </div>
 
