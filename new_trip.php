@@ -45,7 +45,7 @@
             <div class="checkbox">
                 <?php foreach ($passenger_record as $passenger): ?>
                     <label for="passenger"><?=
-                        $passenger['passenger_title'] . " " .
+                        ucwords($passenger['passenger_title']) . " " .
                         $passenger['passenger_fname'] . " " .
                         $passenger['passenger_sname']
                     ?></label>

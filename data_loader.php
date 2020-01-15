@@ -65,7 +65,6 @@ function do_login($cust_login, $password_entered)
     if(password_verify($cust_login, $password_entered)) {
         //
     } else {
-        $cust_record = "";
         echo '<h3>Incorrect Password or email</h3>';
         echo '<form action="index.php" method="POST">';
             echo '<input type="submit" value="Return to login" />';
@@ -104,7 +103,7 @@ function passenger_list($cust_id)
             $html .= "<tbody>";
                 foreach($passrec as $passenger) {
                     $html .= "<tr>";
-                        $html .= "<td>" . $passenger['passenger_title'] . "</td>";
+                        $html .= "<td>" . ucwords($passenger['passenger_title']) . "</td>";
                         $html .= "<td>" . $passenger['passenger_fname'] . "</td>";
                         $html .= "<td>" . $passenger['passenger_sname'] . "</td>";
                         $html .= "<td>" . $passenger['passenger_passport_id'] . "</td>";
@@ -143,28 +142,24 @@ function trip_list($cust_id)
     $triprec = $query->fetchAll();
 
     foreach($triprec as &$trip) {
+
         if(isset($trip['trip_passengers'])) {
             $passengers = explode(',', $trip['trip_passengers']);
             $sql_pass = 'SELECT passenger_title, passenger_fname, passenger_sname FROM passengers ';
     
-            if(count($passengers) == 1) {
-                $sql_pass .= 'WHERE passenger_id = "' . $passengers[0] . '"';
-            } else {
-                foreach($passengers as $index => $passenger_id) {
-                    if($index == 0) {
-                        $sql_pass .= 'WHERE passenger_id ="' . $passenger_id. '" ';
-                    } else {
-                        $sql_pass .= 'OR passenger_id ="' . $passenger_id. '" ';
-                    }
+            foreach($passengers as $index => $passenger_id) {
+                if($index == 0) {
+                    $sql_pass .= 'WHERE passenger_id ="' . $passenger_id . '" ';
+                } else {
+                    $sql_pass .= 'OR passenger_id ="' . $passenger_id . '" ';
                 }
             }
+
             $query = $pdo->query($sql_pass);
             $trip_pass_rec = $query->fetchAll();
             foreach($trip_pass_rec as $passenger) {
                 $trip['passengers'][] = implode(" ", $passenger);
             }
-        } else {
-            $trip['passengers'][] = "";
         }
     }
 
