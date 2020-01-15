@@ -170,8 +170,8 @@ function trip_list($cust_id)
                 $html .= "<tr>";
                     $html .= "<th>From</th>";
                     $html .= "<th>To</th>";
-                    $html .= "<th>Arrival</th>";
                     $html .= "<th>Departure</th>";
+                    $html .= "<th>Arrival</th>";
                     $html .= "<th>Passengers</th>";
                     $html .= "<th>Options</th>";
                     $html .= "<th></th>";
@@ -180,21 +180,23 @@ function trip_list($cust_id)
 
             $html .= "<tbody>";
 
-                foreach($triprec as $trip) {
-                    $dep_time = new DateTime($trip['trip_arr_time']);
-                    $dep_time = $dep_time->format('d-m-Y H:m');
-                    $arr_time = new DateTime($trip['trip_arr_time']);
-                    $arr_time = $arr_time->format('d/m/Y H:m:s');
+                foreach($triprec as $trip_data) {
+                    
+                    $dep_date = DateTime::createFromFormat("Y-m-d H:i:s", $trip_data['trip_dep_time']);
+                    $dep_date = $dep_date->format('d/m/Y H:i');
+
+                    $arr_date = DateTime::createFromFormat("Y-m-d H:i:s", $trip_data['trip_arr_time']);
+                    $arr_date = $arr_date->format('d/m/Y H:i');
 
                     $html .= "<tr>";
-                        $html .= "<td>" . $trip['trip_dep_airport'] . "</td>";
-                        $html .= "<td>" . $trip['trip_arr_airport'] . "</td>";
-                        $html .= "<td>" . $dep_time . "</td>";
-                        $html .= "<td>" . $arr_time . "</td>";
-                        $html .= "<td>" . implode(", ", $trip['passengers'])  . "</td>";
+                        $html .= "<td>" . $trip_data['trip_dep_airport'] . "</td>";
+                        $html .= "<td>" . $trip_data['trip_arr_airport'] . "</td>";
+                        $html .= "<td>" . $dep_date . "</td>";
+                        $html .= "<td>" . $arr_date . "</td>";
+                        $trip_data['passengers'] ? $html .= "<td>" . implode(", ", $trip_data['passengers'])  . "</td>" : $html .= "<td></td>";
                         $html .= "<td>";
                             $html .= "<form action='delete_record.php' method='POST'>";
-                                $html .= "<input name='trip_id' type='hidden' value='" . $trip['trip_id'] . "' />";
+                                $html .= "<input name='trip_id' type='hidden' value='" . $trip_data['trip_id'] . "' />";
                                 $html .= "<input name='cust_id' type='hidden' value='" . $cust_id . "' />";
                                 $html .= "<input type='submit' value='Delete' />";
                             $html .= '</form>';
